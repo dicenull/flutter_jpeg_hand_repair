@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final radioValue = StateProvider((_) => 1);
 
-class RadioButtonList extends HookConsumerWidget {
+class RadioButtonList extends ConsumerWidget {
+  final VoidCallback onChange;
+
+  RadioButtonList(this.onChange);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Wrap(
@@ -29,6 +32,7 @@ class RadioButtonList extends HookConsumerWidget {
             }
 
             ref.read(radioValue.state).state = value;
+            onChange.call();
           },
         ),
       ),

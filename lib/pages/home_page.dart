@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_jpeg_hand_repair/widgets/radio_button_list.dart';
+import 'package:flutter_jpeg_hand_repair/pages/radio_page.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class HomePage extends HookWidget {
+class HomePage extends HookConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = neumorphicDefaultTheme;
     final darkTheme = neumorphicDefaultDarkTheme;
     final mode = ThemeMode.light;
@@ -14,20 +14,12 @@ class HomePage extends HookWidget {
       theme: theme,
       darkTheme: darkTheme,
       themeMode: mode,
-      child: MaterialApp(
-        themeMode: mode,
-        theme: _getMaterialTheme(theme),
-        darkTheme: _getMaterialTheme(darkTheme),
-        home: Scaffold(
-          appBar: NeumorphicAppBar(),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Column(
-              children: [
-                RadioButtonList(),
-              ],
-            ),
-          ),
+      child: ProviderScope(
+        child: MaterialApp(
+          themeMode: mode,
+          theme: _getMaterialTheme(theme),
+          darkTheme: _getMaterialTheme(darkTheme),
+          home: RadioPage(),
         ),
       ),
     );
