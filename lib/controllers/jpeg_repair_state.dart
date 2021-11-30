@@ -9,6 +9,7 @@ part 'jpeg_repair_state.freezed.dart';
 class JpegRepairState with _$JpegRepairState {
   factory JpegRepairState({
     @Default(AsyncValue.loading()) AsyncValue<Uint8List> image,
-    @Default(0) int password,
+    @Default([]) List<int> password,
+    @Default(false) bool correctPassword,
   }) = _JpegRepairState;
 }

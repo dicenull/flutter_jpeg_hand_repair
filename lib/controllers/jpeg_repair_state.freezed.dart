@@ -19,10 +19,12 @@ class _$JpegRepairStateTearOff {
 
   _JpegRepairState call(
       {AsyncValue<Uint8List> image = const AsyncValue.loading(),
-      int password = 0}) {
+      List<int> password = const [],
+      bool correctPassword = false}) {
     return _JpegRepairState(
       image: image,
       password: password,
+      correctPassword: correctPassword,
     );
   }
 }
@@ -33,7 +35,8 @@ const $JpegRepairState = _$JpegRepairStateTearOff();
 /// @nodoc
 mixin _$JpegRepairState {
   AsyncValue<Uint8List> get image => throw _privateConstructorUsedError;
-  int get password => throw _privateConstructorUsedError;
+  List<int> get password => throw _privateConstructorUsedError;
+  bool get correctPassword => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $JpegRepairStateCopyWith<JpegRepairState> get copyWith =>
@@ -45,7 +48,8 @@ abstract class $JpegRepairStateCopyWith<$Res> {
   factory $JpegRepairStateCopyWith(
           JpegRepairState value, $Res Function(JpegRepairState) then) =
       _$JpegRepairStateCopyWithImpl<$Res>;
-  $Res call({AsyncValue<Uint8List> image, int password});
+  $Res call(
+      {AsyncValue<Uint8List> image, List<int> password, bool correctPassword});
 }
 
 /// @nodoc
@@ -61,6 +65,7 @@ class _$JpegRepairStateCopyWithImpl<$Res>
   $Res call({
     Object? image = freezed,
     Object? password = freezed,
+    Object? correctPassword = freezed,
   }) {
     return _then(_value.copyWith(
       image: image == freezed
@@ -70,7 +75,11 @@ class _$JpegRepairStateCopyWithImpl<$Res>
       password: password == freezed
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
-              as int,
+              as List<int>,
+      correctPassword: correctPassword == freezed
+          ? _value.correctPassword
+          : correctPassword // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -82,7 +91,8 @@ abstract class _$JpegRepairStateCopyWith<$Res>
           _JpegRepairState value, $Res Function(_JpegRepairState) then) =
       __$JpegRepairStateCopyWithImpl<$Res>;
   @override
-  $Res call({AsyncValue<Uint8List> image, int password});
+  $Res call(
+      {AsyncValue<Uint8List> image, List<int> password, bool correctPassword});
 }
 
 /// @nodoc
@@ -100,6 +110,7 @@ class __$JpegRepairStateCopyWithImpl<$Res>
   $Res call({
     Object? image = freezed,
     Object? password = freezed,
+    Object? correctPassword = freezed,
   }) {
     return _then(_JpegRepairState(
       image: image == freezed
@@ -109,7 +120,11 @@ class __$JpegRepairStateCopyWithImpl<$Res>
       password: password == freezed
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
-              as int,
+              as List<int>,
+      correctPassword: correctPassword == freezed
+          ? _value.correctPassword
+          : correctPassword // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -118,18 +133,23 @@ class __$JpegRepairStateCopyWithImpl<$Res>
 
 class _$_JpegRepairState implements _JpegRepairState {
   _$_JpegRepairState(
-      {this.image = const AsyncValue.loading(), this.password = 0});
+      {this.image = const AsyncValue.loading(),
+      this.password = const [],
+      this.correctPassword = false});
 
   @JsonKey(defaultValue: const AsyncValue.loading())
   @override
   final AsyncValue<Uint8List> image;
-  @JsonKey(defaultValue: 0)
+  @JsonKey(defaultValue: const [])
   @override
-  final int password;
+  final List<int> password;
+  @JsonKey(defaultValue: false)
+  @override
+  final bool correctPassword;
 
   @override
   String toString() {
-    return 'JpegRepairState(image: $image, password: $password)';
+    return 'JpegRepairState(image: $image, password: $password, correctPassword: $correctPassword)';
   }
 
   @override
@@ -140,14 +160,18 @@ class _$_JpegRepairState implements _JpegRepairState {
                 const DeepCollectionEquality().equals(other.image, image)) &&
             (identical(other.password, password) ||
                 const DeepCollectionEquality()
-                    .equals(other.password, password)));
+                    .equals(other.password, password)) &&
+            (identical(other.correctPassword, correctPassword) ||
+                const DeepCollectionEquality()
+                    .equals(other.correctPassword, correctPassword)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(image) ^
-      const DeepCollectionEquality().hash(password);
+      const DeepCollectionEquality().hash(password) ^
+      const DeepCollectionEquality().hash(correctPassword);
 
   @JsonKey(ignore: true)
   @override
@@ -156,13 +180,17 @@ class _$_JpegRepairState implements _JpegRepairState {
 }
 
 abstract class _JpegRepairState implements JpegRepairState {
-  factory _JpegRepairState({AsyncValue<Uint8List> image, int password}) =
-      _$_JpegRepairState;
+  factory _JpegRepairState(
+      {AsyncValue<Uint8List> image,
+      List<int> password,
+      bool correctPassword}) = _$_JpegRepairState;
 
   @override
   AsyncValue<Uint8List> get image => throw _privateConstructorUsedError;
   @override
-  int get password => throw _privateConstructorUsedError;
+  List<int> get password => throw _privateConstructorUsedError;
+  @override
+  bool get correctPassword => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$JpegRepairStateCopyWith<_JpegRepairState> get copyWith =>

@@ -14,12 +14,12 @@ class RadioPage extends HookConsumerWidget {
       () {
         final controller = ref.read(jpegRepairProvider.notifier);
 
-        controller.generatePass();
+        controller.generatePass(1);
         Future.microtask(() async {
           final imageData = await rootBundle.load('assets/images/dice.jpg');
-          final pass = ref.read(radioValue);
+          final inputs = ref.read(radioValue);
 
-          controller.glitch(Uint8List.view(imageData.buffer), [pass]);
+          controller.glitch(Uint8List.view(imageData.buffer), [inputs]);
         });
 
         return () {};
@@ -62,8 +62,7 @@ class RadioPage extends HookConsumerWidget {
                   .glitch(Uint8List.view(imageData.buffer), [pass]);
             }),
             if (ref.watch(
-                    jpegRepairProvider.select((value) => value.password)) ==
-                ref.watch(radioValue))
+                jpegRepairProvider.select((value) => value.correctPassword)))
               Container(
                 child: Text('正解！！！'),
               ),
