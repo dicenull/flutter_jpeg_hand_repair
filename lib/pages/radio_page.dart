@@ -8,23 +8,32 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class RadioPage extends HookConsumerWidget {
+  final buttonKeys = [UniqueKey(), UniqueKey(), UniqueKey()];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    useEffect(() {
+      final controller = ref.read(jpegRepairProvider.notifier);
+
+      controller.generatePass(buttonKeys.length);
+      return () {};
+    }, []);
     useEffect(
       () {
-        final controller = ref.read(jpegRepairProvider.notifier);
+        final inputs = buttonKeys
+            .map((e) => ref.read(radioValues(e).state).state)
+            .toList();
 
-        controller.generatePass(1);
+        final controller = ref.read(jpegRepairProvider.notifier);
         Future.microtask(() async {
           final imageData = await rootBundle.load('assets/images/dice.jpg');
-          final inputs = ref.read(radioValue);
 
-          controller.glitch(Uint8List.view(imageData.buffer), [inputs]);
+          controller.glitch(Uint8List.view(imageData.buffer), inputs);
         });
 
         return () {};
       },
-      [],
+      buttonKeys.map((e) => ref.watch(radioValues(e))).toList(),
     );
 
     return Scaffold(
@@ -53,13 +62,11 @@ class RadioPage extends HookConsumerWidget {
                 },
               ),
             ),
-            RadioButtonList(() async {
-              final imageData = await rootBundle.load('assets/images/dice.jpg');
-              final pass = ref.read(radioValue);
-
-              ref
-                  .read(jpegRepairProvider.notifier)
-                  .glitch(Uint8List.view(imageData.buffer), [pass]);
+            ...buttonKeys.map((buttonKey) {
+              return RadioButtonList(
+                key: buttonKey,
+                onChange: (value) async {},
+              );
             }),
             if (ref.watch(
                 jpegRepairProvider.select((value) => value.correctPassword)))

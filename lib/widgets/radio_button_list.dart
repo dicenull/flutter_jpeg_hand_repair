@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final radioValue = StateProvider((_) => 1);
+final radioValues = StateProvider.autoDispose.family<int, Key>((_, __) => 1);
 
 class RadioButtonList extends ConsumerWidget {
-  final VoidCallback onChange;
+  final ValueChanged<int> onChange;
+  final Key key;
 
-  RadioButtonList(this.onChange);
+  RadioButtonList({required this.onChange, required this.key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,14 +27,14 @@ class RadioButtonList extends ConsumerWidget {
             ),
           ),
           value: index + 1,
-          groupValue: ref.watch(radioValue),
+          groupValue: ref.watch(radioValues(key)),
           onChanged: (value) {
             if (value == null) {
               return;
             }
 
-            ref.read(radioValue.state).state = value;
-            onChange.call();
+            ref.read(radioValues(key).state).state = value;
+            onChange.call(value);
           },
         ),
       ),
