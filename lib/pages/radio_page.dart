@@ -1,11 +1,21 @@
 import 'dart:typed_data';
 
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_jpeg_hand_repair/controllers/jpeg_repair_controller.dart';
 import 'package:flutter_jpeg_hand_repair/widgets/radio_button_list.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image/image.dart' as image;
+
+final imageProvider = FutureProvider<Uint8List>((ref) async {
+  var characterImg = image.Image(48, 48);
+
+  image.fill(characterImg, image.getColor(255, 0, 0));
+
+  image.drawStringCentered(characterImg, image.arial_48, 'A');
+
+  return Uint8List.fromList(image.encodeJpg(characterImg));
+});
 
 class RadioPage extends HookConsumerWidget {
   final buttonKeys = [UniqueKey(), UniqueKey(), UniqueKey()];
@@ -18,23 +28,26 @@ class RadioPage extends HookConsumerWidget {
       controller.generatePass(buttonKeys.length);
       return () {};
     }, []);
-    useEffect(
-      () {
-        final inputs = buttonKeys
-            .map((e) => ref.read(radioValues(e).state).state)
-            .toList();
 
-        final controller = ref.read(jpegRepairProvider.notifier);
-        Future.microtask(() async {
-          final imageData = await rootBundle.load('assets/images/dice.jpg');
+    useEffect(() {
+      final inputs =
+          buttonKeys.map((e) => ref.read(radioValues(e).state).state).toList();
 
-          controller.glitch(Uint8List.view(imageData.buffer), inputs);
-        });
+      final controller = ref.read(jpegRepairProvider.notifier);
+      Future.microtask(() {
+        ref.read(imageProvider).maybeWhen(
+              data: (imageData) {
+                controller.glitch(imageData, inputs);
+              },
+              orElse: () {},
+            );
+      });
 
-        return () {};
-      },
-      buttonKeys.map((e) => ref.watch(radioValues(e))).toList(),
-    );
+      return () {};
+    }, [
+      ...buttonKeys.map((e) => ref.watch(radioValues(e))),
+      ref.watch(imageProvider),
+    ]);
 
     return Scaffold(
       appBar: NeumorphicAppBar(),
@@ -51,7 +64,7 @@ class RadioPage extends HookConsumerWidget {
                 data: (image) {
                   return Image.memory(
                     image,
-                    scale: .2,
+                    scale: 1.0,
                   );
                 },
                 loading: () {

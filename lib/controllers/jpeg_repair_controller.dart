@@ -12,22 +12,22 @@ final jpegRepairProvider =
 );
 
 class JpegRepairController extends StateNotifier<JpegRepairState> {
-  final rnd = Random();
   JpegRepairController() : super(JpegRepairState());
 
   void generatePass(int digits) {
     state = state.copyWith(
-      password: List.generate(digits, (_) => rnd.nextInt(9) + 1),
+      password: List.generate(digits, (_) => Random().nextInt(9) + 1),
     );
   }
 
   void glitch(Uint8List imageData, List<int> inputs) {
     assert(inputs.length == state.password.length);
 
-    final modifiedBlob = imageData;
+    final modifiedBlob = imageData.toList();
 
     final length = inputs.length;
     List<int> entropies = [];
+    final rnd = Random(12345);
     for (var i = 0; i < length; i++) {
       final e = inputs[i] ^ state.password[i];
       var d = (inputs[i] - state.password[i]).abs();
@@ -49,7 +49,7 @@ class JpegRepairController extends StateNotifier<JpegRepairState> {
     }
 
     state = state.copyWith(
-      image: AsyncValue.data(modifiedBlob),
+      image: AsyncValue.data(Uint8List.fromList(modifiedBlob)),
       correctPassword: listEquals(inputs, state.password),
     );
   }
