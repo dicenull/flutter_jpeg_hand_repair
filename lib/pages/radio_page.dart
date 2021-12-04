@@ -51,44 +51,49 @@ class RadioPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: NeumorphicAppBar(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
+      body: Center(
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ...text.characters.map(
-                  (t) => Container(
-                    width: 32,
-                    height: 32,
-                    child: ref
-                        .watch(jpegRepairProvider(t).select((value) => value))
-                        .when(
-                          data: (image) {
-                            return Image.memory(
-                              image,
-                              scale: 1.0,
-                            );
-                          },
-                          loading: () => Container(
-                            child: Icon(Icons.image),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ...text.characters.map(
+                    (t) => Container(
+                      width: 32,
+                      height: 32,
+                      child: ref
+                          .watch(jpegRepairProvider(t).select((value) => value))
+                          .when(
+                            data: (image) {
+                              return Image.memory(
+                                image,
+                                scale: 1.0,
+                              );
+                            },
+                            loading: () => Container(
+                              child: Icon(Icons.image),
+                            ),
+                            error: (obj, err) => Container(),
                           ),
-                          error: (obj, err) => Container(),
-                        ),
-                  ),
-                )
-              ],
+                    ),
+                  )
+                ],
+              ),
             ),
             ...buttonKeys.map((buttonKey) {
-              return RadioButtonList(
-                key: buttonKey,
-                onChange: (value) async {
-                  ref
-                      .read(jpegPasswordProvider.notifier)
-                      .checkPassword(inputs());
-                },
+              return Padding(
+                padding: const EdgeInsets.only(top: 32),
+                child: RadioButtonList(
+                  key: buttonKey,
+                  onChange: (value) async {
+                    ref
+                        .read(jpegPasswordProvider.notifier)
+                        .checkPassword(inputs());
+                  },
+                ),
               );
             }),
             if (ref.watch(

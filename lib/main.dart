@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_jpeg_hand_repair/pages/home_page.dart';
+import 'package:flutter_jpeg_hand_repair/app.dart';
 
 void main() {
-  runApp(HomePage());
+  runApp(App());
 }

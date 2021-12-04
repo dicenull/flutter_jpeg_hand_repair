@@ -15,13 +15,13 @@ class RadioButtonList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Wrap(
       spacing: 16,
-      runSpacing: 8,
+      runSpacing: 10,
       children: List.generate(
         10,
         (index) => NeumorphicRadio<int>(
           child: SizedBox(
-            height: 50,
-            width: 50,
+            height: 64,
+            width: 64,
             child: Center(
               child: Text("${index + 1}"),
             ),
