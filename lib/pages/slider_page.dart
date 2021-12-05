@@ -82,6 +82,8 @@ class SliderPage extends HookConsumerWidget {
                 child: NeumorphicSlider(
                   min: 0,
                   max: 10,
+                  height: 30,
+                  style: SliderStyle(depth: -3.0),
                   value: ref.watch(_sliderProviders(sliderKey)
                       .select((value) => value.toDouble())),
                   onChanged: (value) {
