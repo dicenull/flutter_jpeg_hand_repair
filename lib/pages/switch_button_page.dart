@@ -4,42 +4,47 @@ import 'package:flutter_jpeg_hand_repair/controllers/jpeg_password_controller.da
 import 'package:flutter_jpeg_hand_repair/controllers/jpeg_repair_controller.dart';
 import 'package:flutter_jpeg_hand_repair/widgets/glitch_timer.dart';
 import 'package:flutter_jpeg_hand_repair/widgets/glitched_image_text.dart';
-import 'package:flutter_jpeg_hand_repair/widgets/radio_button_list.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class RadioPage extends HookConsumerWidget {
-  final buttonKeys = [UniqueKey(), UniqueKey()];
-  final maxPassNum = 5;
-  final text = 'PASSWORD';
+final _checkProvider = StateProvider((_) => false);
+final _inputProvider = Provider(
+  (ref) => ref.watch(_checkProvider.select((v) => v)) ? 1 : 0,
+);
+
+class SwitchPage extends HookConsumerWidget {
+  final _text = '!';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final inputs = () =>
-        buttonKeys.map((e) => ref.read(radioValues(e).state).state).toList();
+    ref.listen<int>(_inputProvider, (previous, next) {
+      ref.read(jpegPasswordProvider.notifier).checkPassword([next]);
+    });
 
     useEffect(() {
       final controller = ref.read(jpegPasswordProvider.notifier);
 
-      Future.microtask(
-        () => controller.generatePass(buttonKeys.length, max: maxPassNum),
-      );
+      Future.microtask(() {
+        ref.read(_checkProvider.notifier).state = false;
+        controller.generatePass(1, max: 0);
+      });
       return () {};
     }, const []);
 
     useEffect(() {
-      text.characters.forEach((t) {
+      _text.characters.forEach((t) {
         final controller = ref.read(jpegRepairProvider(t).notifier);
         Future.microtask(() {
-          controller.glitch(ref.read(imageProvider(t)), inputs());
+          controller.glitch(
+            ref.read(imageProvider(t)),
+            [ref.read(_inputProvider)],
+          );
         });
       });
 
       return () {};
-    }, [
-      ...buttonKeys.map((e) => ref.watch(radioValues(e))),
-    ]);
+    }, [ref.watch(_checkProvider.select((value) => value))]);
 
     return Scaffold(
       appBar: NeumorphicAppBar(),
@@ -53,36 +58,28 @@ class RadioPage extends HookConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ...text.characters.map(
+                  ..._text.characters.map(
                     (t) => GlitchedImageText(t),
                   )
                 ],
               ),
             ),
-            ...buttonKeys.map((buttonKey) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 32),
-                child: RadioButtonList(
-                  max: maxPassNum,
-                  key: buttonKey,
-                  onChange: (value) async {
-                    ref
-                        .read(jpegPasswordProvider.notifier)
-                        .checkPassword(inputs());
-                  },
-                ),
-              );
-            }),
+            NeumorphicSwitch(
+              value: ref.watch(_checkProvider.select((v) => v)),
+              onChanged: (value) {
+                ref.read(_checkProvider.notifier).state = value;
+              },
+            ),
             if (ref.watch(jpegPasswordProvider
                 .select((value) => value.correctPassword))) ...[
               Container(
                 padding: const EdgeInsets.all(16),
-                child: Text('正解！！！'),
+                child: Text('OK!'),
               ),
               NeumorphicButton(
                 child: Text('次に行く'),
                 onPressed: () {
-                  GoRouter.of(context).go('/stages/slider');
+                  GoRouter.of(context).go('/stages/radio');
                 },
               )
             ]

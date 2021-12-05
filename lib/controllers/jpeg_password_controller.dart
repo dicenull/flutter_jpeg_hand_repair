@@ -13,10 +13,16 @@ final jpegPasswordProvider =
 class JpegPasswordController extends StateNotifier<JpegPasswordState> {
   JpegPasswordController() : super(JpegPasswordState());
 
-  void generatePass(int digits) {
-    state = state.copyWith(
-      password: List.generate(digits, (_) => Random().nextInt(9) + 1),
-    );
+  void generatePass(int digits, {int max = 9}) {
+    state = state.copyWith(correctPassword: false);
+
+    if (digits == 1 && max <= 0) {
+      state = state.copyWith(password: [1]);
+    } else {
+      state = state.copyWith(
+        password: List.generate(digits, (_) => Random().nextInt(max) + 1),
+      );
+    }
   }
 
   void checkPassword(List<int> inputs) {
