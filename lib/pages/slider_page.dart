@@ -8,13 +8,10 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image/image.dart';
 
-final _checkProvider = StateProvider((_) => false);
-final _inputProvider = Provider(
-  (ref) => ref.watch(_checkProvider.select((v) => v)) ? 1 : 0,
-);
+final _inputProvider = StateProvider((ref) => 0);
 
-class SwitchPage extends HookConsumerWidget {
-  final _text = '!';
+class SliderPage extends HookConsumerWidget {
+  final _text = 'XYZ';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,7 +38,7 @@ class SwitchPage extends HookConsumerWidget {
       });
 
       return () {};
-    }, [ref.watch(_checkProvider.select((value) => value))]);
+    }, [ref.watch(_inputProvider.select((value) => value))]);
 
     return Scaffold(
       appBar: NeumorphicAppBar(),
@@ -60,11 +57,18 @@ class SwitchPage extends HookConsumerWidget {
                 ],
               ),
             ),
-            NeumorphicSwitch(
-              value: ref.watch(_checkProvider.select((v) => v)),
-              onChanged: (value) {
-                ref.read(_checkProvider.notifier).state = value;
-              },
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 32),
+              constraints: BoxConstraints(maxWidth: 500),
+              child: NeumorphicSlider(
+                min: 0,
+                max: 10,
+                value: ref
+                    .watch(_inputProvider.select((value) => value.toDouble())),
+                onChanged: (value) {
+                  ref.read(_inputProvider.notifier).state = value.round();
+                },
+              ),
             ),
             if (ref.watch(jpegPasswordProvider
                 .select((value) => value.correctPassword))) ...[
@@ -74,7 +78,7 @@ class SwitchPage extends HookConsumerWidget {
               NeumorphicButton(
                 child: Text('次に行く'),
                 onPressed: () {
-                  GoRouter.of(context).go('/stages/slider');
+                  GoRouter.of(context).go('/stages/radio');
                 },
               )
             ]
