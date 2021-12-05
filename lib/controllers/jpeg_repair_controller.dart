@@ -31,7 +31,7 @@ class JpegRepairController extends StateNotifier<AsyncValue<Uint8List>> {
       var d = (inputs[i] - _passCtrl.state.password[i]).abs();
       if (5 > d) d = 10 - d;
 
-      for (var k = 0; k < (d * 3); k++) {
+      for (var k = 0; k < (d); k++) {
         entropies.add(e);
       }
     }
