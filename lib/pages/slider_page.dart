@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_jpeg_hand_repair/controllers/glitch_time_controller.dart';
 import 'package:flutter_jpeg_hand_repair/controllers/image_controller.dart';
@@ -75,25 +77,47 @@ class SliderPage extends HookConsumerWidget {
               ),
             ),
             ...sliderKeys.map((sliderKey) {
-              return Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-                constraints: BoxConstraints(maxWidth: 500),
-                child: NeumorphicSlider(
-                  min: 0,
-                  max: 10,
-                  height: 30,
-                  style: SliderStyle(depth: -3.0),
-                  value: ref.watch(_sliderProviders(sliderKey)
-                      .select((value) => value.toDouble())),
-                  onChanged: (value) {
-                    ref.read(_sliderProviders(sliderKey).notifier).state =
-                        value.round();
-                    ref
-                        .read(jpegPasswordProvider.notifier)
-                        .checkPassword(inputs());
-                  },
-                ),
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  NeumorphicButton(
+                    onPressed: () {
+                      final controller =
+                          ref.read(_sliderProviders(sliderKey).notifier);
+                      controller.state = max(0, (controller.state - 1));
+                    },
+                    child: Icon(Icons.arrow_left),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 32),
+                    constraints: BoxConstraints(maxWidth: 500),
+                    child: NeumorphicSlider(
+                      min: 0,
+                      max: 10,
+                      height: 30,
+                      style: SliderStyle(depth: -3.0),
+                      value: ref.watch(_sliderProviders(sliderKey)
+                          .select((value) => value.toDouble())),
+                      onChanged: (value) {
+                        ref.read(_sliderProviders(sliderKey).notifier).state =
+                            value.round();
+                        ref
+                            .read(jpegPasswordProvider.notifier)
+                            .checkPassword(inputs());
+                      },
+                    ),
+                  ),
+                  NeumorphicButton(
+                    onPressed: () {
+                      final controller =
+                          ref.read(_sliderProviders(sliderKey).notifier);
+                      controller.state = min(10, (controller.state + 1));
+                    },
+                    child: Icon(Icons.arrow_right),
+                  ),
+                ],
               );
             }),
             if (ref.watch(jpegPasswordProvider
