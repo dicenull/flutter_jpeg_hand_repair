@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_jpeg_hand_repair/controllers/glitch_time_controller.dart';
 import 'package:flutter_jpeg_hand_repair/controllers/image_controller.dart';
@@ -15,6 +13,7 @@ final _sliderProviders = StateProvider.autoDispose.family((ref, _) => 0);
 
 class SliderPage extends HookConsumerWidget {
   final sliderKeys = [UniqueKey(), UniqueKey(), UniqueKey()];
+  final _max = 10;
   final _text = 'HogeHugaPiyoPiyo';
 
   @override
@@ -40,6 +39,7 @@ class SliderPage extends HookConsumerWidget {
             ref.read(imageProvider(t)),
             inputs(),
           );
+          ref.read(jpegPasswordProvider.notifier).checkPassword(inputs());
         });
       });
 
@@ -85,7 +85,7 @@ class SliderPage extends HookConsumerWidget {
                     onPressed: () {
                       final controller =
                           ref.read(_sliderProviders(sliderKey).notifier);
-                      controller.state = max(0, (controller.state - 1));
+                      controller.state = (controller.state + _max - 1) % _max;
                     },
                     child: Icon(Icons.arrow_left),
                   ),
@@ -95,7 +95,7 @@ class SliderPage extends HookConsumerWidget {
                     constraints: BoxConstraints(maxWidth: 500),
                     child: NeumorphicSlider(
                       min: 0,
-                      max: 10,
+                      max: 9,
                       height: 30,
                       style: SliderStyle(depth: -3.0),
                       value: ref.watch(_sliderProviders(sliderKey)
@@ -103,9 +103,6 @@ class SliderPage extends HookConsumerWidget {
                       onChanged: (value) {
                         ref.read(_sliderProviders(sliderKey).notifier).state =
                             value.round();
-                        ref
-                            .read(jpegPasswordProvider.notifier)
-                            .checkPassword(inputs());
                       },
                     ),
                   ),
@@ -113,7 +110,7 @@ class SliderPage extends HookConsumerWidget {
                     onPressed: () {
                       final controller =
                           ref.read(_sliderProviders(sliderKey).notifier);
-                      controller.state = min(10, (controller.state + 1));
+                      controller.state = (controller.state + 1) % _max;
                     },
                     child: Icon(Icons.arrow_right),
                   ),
