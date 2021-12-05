@@ -12,8 +12,11 @@ final jpegRepairProvider = StateNotifierProvider.autoDispose
 
 class JpegRepairController extends StateNotifier<AsyncValue<Uint8List>> {
   Reader _reader;
+  final int _seed;
 
-  JpegRepairController(this._reader) : super(AsyncValue.loading());
+  JpegRepairController(this._reader)
+      : _seed = Random().nextInt(1 << 30),
+        super(AsyncValue.loading());
 
   JpegPasswordController get _passCtrl =>
       _reader(jpegPasswordProvider.notifier);
@@ -25,7 +28,7 @@ class JpegRepairController extends StateNotifier<AsyncValue<Uint8List>> {
 
     final length = inputs.length;
     List<int> entropies = [];
-    final rnd = Random(12345);
+    final rnd = Random(_seed);
     for (var i = 0; i < length; i++) {
       final e = inputs[i] ^ _passCtrl.state.password[i];
       var d = (inputs[i] - _passCtrl.state.password[i]).abs();
