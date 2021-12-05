@@ -14,7 +14,7 @@ final _sliderProviders = StateProvider.autoDispose.family((ref, _) => 0);
 class SliderPage extends HookConsumerWidget {
   final sliderKeys = [UniqueKey(), UniqueKey(), UniqueKey()];
   final _max = 10;
-  final _text = 'HogeHugaPiyoPiyo';
+  final _text = 'AdventCalendar2021!';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
