@@ -34,19 +34,51 @@ class App extends StatelessWidget {
   final _router = GoRouter(routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => HomePage(),
+      pageBuilder: (context, state) => CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: HomePage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+      ),
     ),
     GoRoute(
       path: '/stages/radio',
-      builder: (context, state) => RadioPage(),
+      pageBuilder: (context, state) => CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: RadioPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+      ),
     ),
     GoRoute(
       path: '/stages/switch',
-      builder: (context, state) => SwitchPage(),
+      pageBuilder: (context, state) => CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: SwitchPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+      ),
     ),
     GoRoute(
       path: '/stages/slider',
-      builder: (context, state) => SliderPage(),
+      pageBuilder: (context, state) => CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: SliderPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+      ),
     ),
   ]);
 }
