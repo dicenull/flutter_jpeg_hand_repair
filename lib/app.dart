@@ -1,5 +1,6 @@
 import 'package:flutter_jpeg_hand_repair/pages/home_page.dart';
 import 'package:flutter_jpeg_hand_repair/pages/radio_page.dart';
+import 'package:flutter_jpeg_hand_repair/pages/switch_button_page.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -37,6 +38,10 @@ class App extends StatelessWidget {
     GoRoute(
       path: '/stages/radio',
       builder: (context, state) => RadioPage(),
+    ),
+    GoRoute(
+      path: '/stages/switch',
+      builder: (context, state) => SwitchPage(),
     )
   ]);
 }

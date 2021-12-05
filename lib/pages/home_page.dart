@@ -18,7 +18,7 @@ class HomePage extends HookConsumerWidget {
                 padding: const EdgeInsets.symmetric(vertical: 64),
                 child: NeumorphicButton(
                   onPressed: () {
-                    GoRouter.of(context).go('/stages/radio');
+                    GoRouter.of(context).go('/stages/switch');
                   },
                   child: Text('はじめる'),
                 ),
