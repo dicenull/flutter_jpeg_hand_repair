@@ -6,7 +6,6 @@ import 'package:flutter_jpeg_hand_repair/widgets/glitched_image_text.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:image/image.dart';
 
 final _checkProvider = StateProvider((_) => false);
 final _inputProvider = Provider(
@@ -25,7 +24,10 @@ class SwitchPage extends HookConsumerWidget {
     useEffect(() {
       final controller = ref.read(jpegPasswordProvider.notifier);
 
-      Future.microtask(() => controller.generatePass(1, max: 0));
+      Future.microtask(() {
+        ref.read(_checkProvider.notifier).state = false;
+        controller.generatePass(1, max: 0);
+      });
       return () {};
     }, const []);
 
@@ -69,12 +71,13 @@ class SwitchPage extends HookConsumerWidget {
             if (ref.watch(jpegPasswordProvider
                 .select((value) => value.correctPassword))) ...[
               Container(
+                padding: const EdgeInsets.all(16),
                 child: Text('OK!'),
               ),
               NeumorphicButton(
                 child: Text('次に行く'),
                 onPressed: () {
-                  GoRouter.of(context).go('/stages/slider');
+                  GoRouter.of(context).go('/stages/radio');
                 },
               )
             ]

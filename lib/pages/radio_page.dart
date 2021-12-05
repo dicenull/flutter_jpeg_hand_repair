@@ -5,10 +5,12 @@ import 'package:flutter_jpeg_hand_repair/controllers/jpeg_repair_controller.dart
 import 'package:flutter_jpeg_hand_repair/widgets/glitched_image_text.dart';
 import 'package:flutter_jpeg_hand_repair/widgets/radio_button_list.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class RadioPage extends HookConsumerWidget {
-  final buttonKeys = [UniqueKey(), UniqueKey(), UniqueKey()];
+  final buttonKeys = [UniqueKey(), UniqueKey()];
+  final maxPassNum = 5;
   final text = 'PASSWORD';
 
   @override
@@ -20,7 +22,7 @@ class RadioPage extends HookConsumerWidget {
       final controller = ref.read(jpegPasswordProvider.notifier);
 
       Future.microtask(
-        () => controller.generatePass(buttonKeys.length),
+        () => controller.generatePass(buttonKeys.length, max: maxPassNum),
       );
       return () {};
     }, const []);
@@ -59,6 +61,7 @@ class RadioPage extends HookConsumerWidget {
               return Padding(
                 padding: const EdgeInsets.only(top: 32),
                 child: RadioButtonList(
+                  max: maxPassNum,
                   key: buttonKey,
                   onChange: (value) async {
                     ref
@@ -68,11 +71,19 @@ class RadioPage extends HookConsumerWidget {
                 ),
               );
             }),
-            if (ref.watch(
-                jpegPasswordProvider.select((value) => value.correctPassword)))
+            if (ref.watch(jpegPasswordProvider
+                .select((value) => value.correctPassword))) ...[
               Container(
+                padding: const EdgeInsets.all(16),
                 child: Text('正解！！！'),
               ),
+              NeumorphicButton(
+                child: Text('次に行く'),
+                onPressed: () {
+                  GoRouter.of(context).go('/stages/slider');
+                },
+              )
+            ]
           ],
         ),
       ),

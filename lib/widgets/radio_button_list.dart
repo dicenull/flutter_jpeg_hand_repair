@@ -5,10 +5,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final radioValues = StateProvider.autoDispose.family<int, Key>((_, __) => 1);
 
 class RadioButtonList extends ConsumerWidget {
+  final int max;
   final ValueChanged<int> onChange;
   final Key key;
 
-  RadioButtonList({required this.onChange, required this.key})
+  RadioButtonList(
+      {required this.onChange, required this.key, required this.max})
       : super(key: key);
 
   @override
@@ -17,7 +19,7 @@ class RadioButtonList extends ConsumerWidget {
       spacing: 16,
       runSpacing: 10,
       children: List.generate(
-        10,
+        max,
         (index) => NeumorphicRadio<int>(
           child: SizedBox(
             height: 64,
