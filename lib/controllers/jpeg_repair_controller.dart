@@ -42,7 +42,7 @@ class JpegRepairController extends StateNotifier<AsyncValue<Uint8List>> {
     for (final entropy in entropies) {
       // JPEG ヘッダ部分（先頭）は改変しない
       // 630 ~ size
-      final headerBand = 630;
+      final headerBand = 630 + 10;
       final pos =
           rnd.nextInt(modifiedBlob.length - 1 - headerBand) + headerBand;
 
