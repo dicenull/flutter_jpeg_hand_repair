@@ -2,6 +2,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_jpeg_hand_repair/controllers/image_controller.dart';
 import 'package:flutter_jpeg_hand_repair/controllers/jpeg_password_controller.dart';
 import 'package:flutter_jpeg_hand_repair/controllers/jpeg_repair_controller.dart';
+import 'package:flutter_jpeg_hand_repair/widgets/glitch_timer.dart';
 import 'package:flutter_jpeg_hand_repair/widgets/glitched_image_text.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:go_router/go_router.dart';
@@ -47,6 +48,7 @@ class SwitchPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: NeumorphicAppBar(),
+      floatingActionButton: GlitchTimer(),
       body: Center(
         child: Column(
           children: [
