@@ -1,16 +1,7 @@
 # flutter_jpeg_hand_repair
 
-A new Flutter project.
+JPGファイルを手動で復元するアプリです。
 
-## Getting Started
+![62c4c909a0b85bfc5df7c73cc54ba37f](https://user-images.githubusercontent.com/15647868/147756272-375287f0-996b-47a8-af3f-8be374239912.png)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+こちらを参考にしています: https://gist.github.com/Reputeless/0f646895892df57ad3042d6ab3abc053
